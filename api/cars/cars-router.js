@@ -3,6 +3,8 @@ const express = require("express")
 const router = express.Router()
 const Cars = require("./cars-model")
 
+
+//GET
 router.get("/", (req, res) => {
     Cars.getAll()
     .then((result) => {
@@ -13,6 +15,7 @@ router.get("/", (req, res) => {
     })
 })
 
+//GET BY ID
 router.get("/:id", (req, res) => {
     Cars.getById(req.params.id)
     .then((result) => {
@@ -27,8 +30,36 @@ router.get("/:id", (req, res) => {
     })
 })
 
-// router.post("/", (req, res) => {
+//POST
+router.post("/", (req, res) => {
+    if(req.body.vin == null) {
+        res.status(400).json({message: "vin is missing"})
+        return
+    }
+    if(req.body.make == null) {
+        res.status(400).json({message: "make is missing"})
+        return
+    }
+    if(req.body.model == null) {
+        res.status(400).json({message: "model is missing"})
+        return
+    }
+    if(req.body.mileage == null) {
+        res.status(400).json({message: "mileage is missing"})
+        return 
+    }
+    Cars.create(req.body)
+    .then((id) => {
+        return Cars.getById(id.id)
+    })
+    .then((result) => {
+        res.status(201).json(result)
+    })
+    .catch((err) => {
+        console.log(err);        
+    })
+})
 
-// })
+
 
 module.exports = router

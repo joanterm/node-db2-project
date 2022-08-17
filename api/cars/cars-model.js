@@ -18,8 +18,15 @@ const create = (cars) => {
     })
 }
 
+const uniqueVin = (vin) => {
+  return db("cars")
+    .where("vin", vin)
+    .first()
+}
+
 module.exports = {
   getAll,
   getById,
-  create
+  create,
+  uniqueVin
 }
